@@ -5,8 +5,8 @@ use libtww::link::CollisionType;
 use libtww::Link;
 
 use crate::{
-    cheat_menu, controller, flag_menu, inventory_menu, main_menu, quest_menu, spawn_menu, triforce,
-    warp_menu,
+    cheat_menu, controller, flag_menu, inventory_menu, main_menu, memory, quest_menu, spawn_menu,
+    triforce, warp_menu,
 };
 
 pub struct ColonWrapper<'a>(pub &'a str, pub &'a str, pub usize);

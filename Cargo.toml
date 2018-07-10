@@ -18,4 +18,4 @@ lto = true
 [dependencies]
 libtww = { git = "https://github.com/CryZe/libtww-core" }
 gcn = { git = "https://github.com/CryZe/gcn", features = ["panic"] }
-lazy_static = { version = "1.0.0", features = ["spin_no_std"] }
+lazy_static = { version = "1.4.0", features = ["spin_no_std"] }

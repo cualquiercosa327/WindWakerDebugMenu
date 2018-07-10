@@ -3,8 +3,8 @@
 
 extern crate gcn;
 extern crate libtww;
-// #[macro_use]
-// extern crate lazy_static;
+#[macro_use]
+extern crate lazy_static;
 
 use libtww::game::Console;
 use libtww::system;
