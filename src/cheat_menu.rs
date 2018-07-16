@@ -99,12 +99,25 @@ pub fn apply_cheats() {
                     system::memory::write::<u32>(0x8039830C, 0x40000000);
                     system::memory::write::<u32>(0x80398310, 0x41000000);
                 }
+                HDRolls => {
+                    // Credits to Trog and LagoLunatic for HD roll cheat
+                    system::memory::write::<f32>(0x80350958, 6.0/17.0);
+                    system::memory::write::<f32>(0x8035095C, 20.0);
+                }
+            }
+        } else {
+            match cheat.id {
+                HDRolls => {
+                    system::memory::write::<f32>(0x80350958, 1.5);
+                    system::memory::write::<f32>(0x8035095C, 0.5);
+                }
+                _ => {}
             }
         }
     }
 }
 
-static mut cheats: [Cheat; 7] = [
+static mut cheats: [Cheat; 8] = [
     Cheat::new(Invincible, "Invincible", true),
     Cheat::new(InfiniteMagic, "Infinite Magic", true),
     Cheat::new(InfiniteAir, "Infinite Air", true),
@@ -112,6 +125,7 @@ static mut cheats: [Cheat; 7] = [
     Cheat::new(SwiftWind, "Swift Wind", true),
     Cheat::new(MoonJump, "Moon Jump", false),
     Cheat::new(FastMovement, "Fast Movement", false),
+    Cheat::new(HDRolls, "HD Style Rolls", true)
 ];
 
 #[derive(Copy, Clone)]
@@ -123,6 +137,7 @@ enum CheatId {
     SwiftWind,
     MoonJump,
     FastMovement,
+    HDRolls
 }
 
 use self::CheatId::*;
