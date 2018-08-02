@@ -1,51 +1,56 @@
-use core::fmt;
-
 use libtww::game::Console;
 use libtww::link::CollisionType;
 use libtww::Link;
 
-use crate::{
-    cheat_menu, controller, flag_menu, inventory_menu, main_menu, memory, quest_menu, spawn_menu,
-    triforce, warp_menu,
-};
+use crate::controller;
 
-pub struct ColonWrapper<'a>(pub &'a str, pub &'a str, pub usize);
+use super::*;
 
-impl fmt::Display for ColonWrapper<'_> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}:", self.0)?;
-        if self.0.len() + 1 < self.2 {
-            for _ in 0..(self.2 - self.0.len()) {
-                write!(f, " ")?;
+macro_rules! define_menu {
+    ( $( ($name:ident, $m:ident)),* ) => (
+        #[derive(Copy, Clone)]
+        pub enum MenuState {
+            $(
+                $name,
+            )*
+        }
+
+        pub fn transition(state: MenuState) {
+            clear_menu();
+            unsafe { menu_state = state; }
+            match state {
+                $(
+                    MenuState::$name => $m::transition_into(),
+                )*
             }
         }
-        let _ = write!(f, "{}", self.1);
-        Ok(())
-    }
+
+        pub fn render() {
+            match unsafe { menu_state } {
+                $(
+                    MenuState::$name => $m::render(),
+                )*
+            }
+        }
+    )
 }
 
+pub static mut menu_state: MenuState = MenuState::MainMenu;
+
+define_menu!(
+    (MainMenu, main_menu),
+    (WarpMenu, warp_menu),
+    (FlagMenu, flag_menu),
+    (InventoryMenu, inventory_menu),
+    (CheatMenu, cheat_menu),
+    (SpawnMenu, spawn_menu),
+    (Memory, memory)
+);
 pub fn clear_menu() {
     let console = Console::get();
     let lines = &mut console.lines;
     for line in lines.into_iter().skip(3) {
         line.clear();
-    }
-}
-
-pub fn transition(state: MenuState) {
-    clear_menu();
-    unsafe {
-        menu_state = state;
-    }
-    match state {
-        MenuState::MainMenu => main_menu::transition_into(),
-        MenuState::WarpMenu => warp_menu::transition_into(),
-        MenuState::FlagMenu => flag_menu::transition_into(),
-        MenuState::InventoryMenu => inventory_menu::transition_into(),
-        MenuState::CheatMenu => cheat_menu::transition_into(),
-        MenuState::SpawnMenu => spawn_menu::transition_into(),
-        MenuState::QuestMenu => quest_menu::transition_into(),
-        MenuState::Triforce => triforce::render(),
     }
 }
 
@@ -83,17 +88,3 @@ pub fn bool_to_text(b: bool) -> &'static str {
         "off"
     }
 }
-
-#[derive(Copy, Clone)]
-pub enum MenuState {
-    MainMenu,
-    WarpMenu,
-    FlagMenu,
-    InventoryMenu,
-    CheatMenu,
-    SpawnMenu,
-    QuestMenu,
-    Triforce,
-}
-
-pub static mut menu_state: MenuState = MenuState::MainMenu;

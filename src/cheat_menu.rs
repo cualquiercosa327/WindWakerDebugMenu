@@ -1,5 +1,6 @@
 use core::fmt::Write;
 use libtww::game::Console;
+use libtww::link::inventory::Inventory;
 use libtww::system;
 use libtww::Link;
 
@@ -54,6 +55,7 @@ impl Cheat {
 
 pub fn apply_cheats() {
     let link = Link::get();
+    let inventory = Inventory::get();
 
     for cheat in unsafe { &cheats } {
         if cheat.active {
@@ -101,8 +103,14 @@ pub fn apply_cheats() {
                 }
                 HDRolls => {
                     // Credits to Trog and LagoLunatic for HD roll cheat
-                    system::memory::write::<f32>(0x80350958, 6.0/17.0);
+                    system::memory::write::<f32>(0x80350958, 6.0 / 17.0);
                     system::memory::write::<f32>(0x8035095C, 20.0);
+                }
+                InfiniteBombs => {
+                    inventory.bomb_count = 99;
+                }
+                InfiniteArrows => {
+                    inventory.arrow_count = 99;
                 }
             }
         } else {
@@ -117,15 +125,17 @@ pub fn apply_cheats() {
     }
 }
 
-static mut cheats: [Cheat; 8] = [
+static mut cheats: [Cheat; 10] = [
     Cheat::new(Invincible, "Invincible", true),
     Cheat::new(InfiniteMagic, "Infinite Magic", true),
     Cheat::new(InfiniteAir, "Infinite Air", true),
     Cheat::new(InfiniteRupees, "Infinite Rupees", true),
+    Cheat::new(InfiniteBombs, "Infinite Bombs", true),
+    Cheat::new(InfiniteArrows, "Infinite Arrows", true),
     Cheat::new(SwiftWind, "Swift Wind", true),
     Cheat::new(MoonJump, "Moon Jump", false),
     Cheat::new(FastMovement, "Fast Movement", false),
-    Cheat::new(HDRolls, "HD Style Rolls", true)
+    Cheat::new(HDRolls, "HD Style Rolls", true),
 ];
 
 #[derive(Copy, Clone)]
@@ -134,10 +144,12 @@ enum CheatId {
     InfiniteMagic,
     InfiniteAir,
     InfiniteRupees,
+    InfiniteBombs,
+    InfiniteArrows,
     SwiftWind,
     MoonJump,
     FastMovement,
-    HDRolls
+    HDRolls,
 }
 
 use self::CheatId::*;
@@ -152,8 +164,6 @@ pub fn render() {
     let down_a = controller::A.is_down();
     let pressed_a = controller::A.is_pressed();
     let pressed_b = controller::B.is_pressed();
-    // let dpad_left = controller::DPAD_LEFT.is_pressed();
-    // let dpad_right = controller::DPAD_RIGHT.is_pressed();
 
     if pressed_b {
         transition(MenuState::MainMenu);

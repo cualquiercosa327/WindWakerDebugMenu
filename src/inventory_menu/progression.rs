@@ -5,6 +5,8 @@ use libtww::link::{pearl, triforce};
 use crate::controller;
 use crate::utils::*;
 
+use super::{inv_menu_state, InventoryMenu};
+
 static mut cursor: usize = 0;
 
 #[derive(Copy, Clone)]
@@ -37,17 +39,41 @@ impl Item {
 }
 
 const ITEMS: [(&str, Item); 11] = [
-    ("Din's Pearl", Item::Pearl(pearl::DINS_PEARL)),
-    ("Farore's Pearl", Item::Pearl(pearl::FARORES_PEARL)),
-    ("Nayru's Pearl", Item::Pearl(pearl::NAYRUS_PEARL)),
-    ("Piece 1", Item::Triforce(triforce::TRIFORCE_PIECE_1)),
-    ("Piece 2", Item::Triforce(triforce::TRIFORCE_PIECE_2)),
-    ("Piece 3", Item::Triforce(triforce::TRIFORCE_PIECE_3)),
-    ("Piece 4", Item::Triforce(triforce::TRIFORCE_PIECE_4)),
-    ("Piece 5", Item::Triforce(triforce::TRIFORCE_PIECE_5)),
-    ("Piece 6", Item::Triforce(triforce::TRIFORCE_PIECE_6)),
-    ("Piece 7", Item::Triforce(triforce::TRIFORCE_PIECE_7)),
-    ("Piece 8", Item::Triforce(triforce::TRIFORCE_PIECE_8)),
+    ("Din's Pearl    :", Item::Pearl(pearl::DINS_PEARL)),
+    ("Farore's Pearl :", Item::Pearl(pearl::FARORES_PEARL)),
+    ("Nayru's Pearl  :", Item::Pearl(pearl::NAYRUS_PEARL)),
+    (
+        "Piece 1        :",
+        Item::Triforce(triforce::TRIFORCE_PIECE_1),
+    ),
+    (
+        "Piece 2        :",
+        Item::Triforce(triforce::TRIFORCE_PIECE_2),
+    ),
+    (
+        "Piece 3        :",
+        Item::Triforce(triforce::TRIFORCE_PIECE_3),
+    ),
+    (
+        "Piece 4        :",
+        Item::Triforce(triforce::TRIFORCE_PIECE_4),
+    ),
+    (
+        "Piece 5        :",
+        Item::Triforce(triforce::TRIFORCE_PIECE_5),
+    ),
+    (
+        "Piece 6        :",
+        Item::Triforce(triforce::TRIFORCE_PIECE_6),
+    ),
+    (
+        "Piece 7        :",
+        Item::Triforce(triforce::TRIFORCE_PIECE_7),
+    ),
+    (
+        "Piece 8        :",
+        Item::Triforce(triforce::TRIFORCE_PIECE_8),
+    ),
 ];
 
 pub fn transition_into() {}
@@ -74,7 +100,10 @@ pub fn render() {
     let pressed_b = controller::B.is_pressed();
 
     if pressed_b {
-        transition(MenuState::QuestMenu);
+        unsafe {
+            inv_menu_state = InventoryMenu::Quest;
+        }
+        transition(MenuState::InventoryMenu);
         return;
     }
 

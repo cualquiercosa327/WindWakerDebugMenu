@@ -1,3 +1,4 @@
+use super::{inv_menu_state, InventoryMenu};
 use core::fmt::Write;
 use libtww::game::Console;
 use libtww::link::item::*;
@@ -29,23 +30,27 @@ const MENU_ITEM_EARTH_GODS_LYRIC: usize = 8;
 const MENU_ITEM_WIND_GODS_ARIA: usize = 9;
 const MENU_ITEM_SONG_OF_PASSING: usize = 10;
 const MENU_ITEM_SPACE_0: usize = 11;
-const MENU_ITEM_TRIFORCE: usize = 12;
+const MENU_ITEM_PROGRESSION: usize = 12;
 
 const ITEMS: [&str; 13] = [
-    "Sword",
-    "Shield",
-    "Pirates's Charm",
-    "Power Bracelets",
-    "Hero's Charm",
-    "Wind's Requiem",
-    "Ballad of Gales",
-    "Command Melody",
+    "Sword            ",
+    "Shield           ",
+    "Pirates's Charm  ",
+    "Power Bracelets  ",
+    "Hero's Charm     ",
+    "Wind's Requiem   ",
+    "Ballad of Gales  ",
+    "Command Melody   ",
     "Earth God's Lyric",
-    "Wind God's Aria",
-    "Song of Passing",
+    "Wind God's Aria  ",
+    "Song of Passing  ",
     "",
     "Progression Items",
 ];
+
+// Bomb Bag
+// Quiver
+// Wallet Upgrade
 
 fn handle_item_switch() {
     let link = Link::get();
@@ -171,16 +176,20 @@ pub fn render() {
     let a_button = controller::A.is_pressed();
 
     if pressed_b {
-        transition(MenuState::MainMenu);
+        unsafe {
+            inv_menu_state = InventoryMenu::Main;
+        }
+        transition(MenuState::InventoryMenu);
         return;
     } else if a_button {
-        if unsafe { cursor } == MENU_ITEM_TRIFORCE {
-            transition(MenuState::Triforce);
+        if unsafe { cursor } == MENU_ITEM_PROGRESSION {
+            unsafe {
+                inv_menu_state = InventoryMenu::Progression;
+            }
+            transition(MenuState::InventoryMenu);
             return;
         }
     }
-
-    let len = ITEMS.iter().take(11).max_by_key(|x| x.len()).unwrap().len();
 
     scroll_move_cursor();
 
@@ -209,8 +218,8 @@ pub fn render() {
         };
 
         let _ = match index {
-            MENU_ITEM_TRIFORCE | MENU_ITEM_SPACE_0 => write!(line.append(), "{}", text),
-            _ => write!(line.append(), "{}", ColonWrapper(text, item_text, len)),
+            MENU_ITEM_PROGRESSION | MENU_ITEM_SPACE_0 => write!(line.append(), "{}", text),
+            _ => write!(line.append(), "{}: {}", text, item_text),
         };
     }
 }

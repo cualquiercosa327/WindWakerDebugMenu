@@ -3,6 +3,7 @@ use libtww::game::Console;
 use libtww::link::inventory::Inventory;
 use libtww::link::item::*;
 
+use super::{inv_menu_state, InventoryMenu};
 use crate::controller;
 use crate::utils::*;
 
@@ -227,13 +228,16 @@ pub fn render() {
     let console = Console::get();
     let lines = &mut console.lines;
 
-    let _ = write!(lines[0].begin(), "Inventory Menu");
-    let _ = write!(lines[1].begin(), "==============");
+    let _ = write!(lines[0].begin(), "Inventory Screen");
+    let _ = write!(lines[1].begin(), "================");
 
     let pressed_b = controller::B.is_pressed();
 
     if pressed_b {
-        transition(MenuState::MainMenu);
+        unsafe {
+            inv_menu_state = InventoryMenu::Main;
+        }
+        transition(MenuState::InventoryMenu);
         return;
     }
 
