@@ -17,5 +17,5 @@ map = "target/framework.map"
 iso = "target/rom_hack.iso"
 
 [link]
-entries = ["init", "game_loop", "read_controller"]
+entries = ["init", "game_loop", "read_controller", "draw"]
 base = "0x8040_1000"
