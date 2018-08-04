@@ -1,0 +1,8 @@
+[package]
+name = "font-exporter"
+version = "0.1.0"
+authors = ["Cristobal Hall-Ramos <crishallramos@yahoo.com>"]
+
+[dependencies]
+rusttype = { version = "0.6.2", features=["gpu_cache"] }
+image = "0.19"
