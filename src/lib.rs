@@ -141,21 +141,4 @@ pub unsafe extern "C" fn draw() {
         gx::BL_INVSRCALPHA,
         gx::LO_SET,
     );
-
-    // printf("Hello From Rust, just game you fool!", 20.0, 40.0);
-    let link = Link::get();
-    printf(
-        &format!("Hearts: {}", link.heart_quarters as f32 / 4.0),
-        35.0,
-        65.0,
-        0xF19292FF,
-        0xD5524AFF,
-    );
-    printf(
-        &format!("Magic: {}", link.magic),
-        35.0,
-        105.0,
-        0x00E664FF,
-        0x008A3FFF,
-    );
 }
