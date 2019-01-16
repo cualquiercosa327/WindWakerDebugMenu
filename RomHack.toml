@@ -1,20 +1,17 @@
 [info]
-game-name = "Wind Waker: Debug Menu"
-full-game-name = "Wind Waker: Debug Menu"
-developer-name = "Speedrun Community"
+game-name = "WW:GZ"
+full-game-name = "The Legend of Zelda: The Wind Waker Debug"
+developer-name = "The Wind Waker Community"
 full-developer-name = "Wind Waker Speedrun Community"
-description = "Allows for more control over the game"
-image = "banner.png"
 
 [src]
 iso = "gzlj01.iso"
-link = ["target/powerpc-unknown-linux-gnu/release/librust.a"]
 patch = "src/patch.asm"
 map = "maps/framework.map"
 
 [build]
-map = "target/framework.map"
-iso = "target/rom_hack.iso"
+map = "G:/Users/crish/Documents/Dolphin Emulator/Maps/GZLJ01.map"
+iso = "target/wwgz.iso"
 
 [link]
 entries = ["init", "game_loop", "read_controller", "draw"]

@@ -1,3 +1,4 @@
+use arrayvec::ArrayString;
 use arrayvec::ArrayVec;
 use core::fmt::Write;
 use core::fmt::{Debug, Display, Error, Formatter};
@@ -8,6 +9,7 @@ use libtww::Addr;
 use controller;
 use core::cell::RefCell;
 use libtww::system::mutex::Mutex;
+use print;
 use utils::*;
 
 #[derive(Copy, Clone, PartialEq)]
@@ -190,21 +192,14 @@ lazy_static! {
 pub fn transition_into() {}
 
 pub fn render_watches() {
-    let console = Console::get();
-    console.clear();
-    console.visible = true;
-    console.background_color.a = 0;
-
-    let lines = &mut console.lines;
-
     ITEMS.borrow_mut().iter_mut().for_each(|item| {
-        item.update();
         if item.visible {
-            let mut line = lines[item.y as usize].begin();
-            for _ in 0..item.x {
-                let _ = write!(line, " ");
+            item.update();
+            let mut s = ArrayString::<[u8; 64]>::new();
+            let _ = write!(s, "{}", item);
+            unsafe {
+                print::printf(s.as_str(), item.x as f32, item.y as f32, 0xFF_FF_FF_FF);
             }
-            let _ = write!(line, "{}", item);
         }
     });
 }
@@ -260,41 +255,55 @@ pub fn render() {
             } else if controller::DPAD_UP.is_pressed() {
                 match edit_cursor {
                     3 => current_watch.visible = !current_watch.visible,
-                    8 => if current_watch.t != Type::Velocity {
-                        if current_watch.addr < 0x8F000000 {
-                            current_watch.addr += 0x1000000;
+                    8 => {
+                        if current_watch.t != Type::Velocity {
+                            if current_watch.addr < 0x8F000000 {
+                                current_watch.addr += 0x1000000;
+                            }
                         }
-                    },
-                    9 => if current_watch.t != Type::Velocity {
-                        if current_watch.addr < 0x8FF00000 {
-                            current_watch.addr += 0x100000;
+                    }
+                    9 => {
+                        if current_watch.t != Type::Velocity {
+                            if current_watch.addr < 0x8FF00000 {
+                                current_watch.addr += 0x100000;
+                            }
                         }
-                    },
-                    10 => if current_watch.t != Type::Velocity {
-                        if current_watch.addr < 0x8FFF0000 {
-                            current_watch.addr += 0x10000;
+                    }
+                    10 => {
+                        if current_watch.t != Type::Velocity {
+                            if current_watch.addr < 0x8FFF0000 {
+                                current_watch.addr += 0x10000;
+                            }
                         }
-                    },
-                    11 => if current_watch.t != Type::Velocity {
-                        if current_watch.addr < 0x8FFFF000 {
-                            current_watch.addr += 0x1000;
+                    }
+                    11 => {
+                        if current_watch.t != Type::Velocity {
+                            if current_watch.addr < 0x8FFFF000 {
+                                current_watch.addr += 0x1000;
+                            }
                         }
-                    },
-                    12 => if current_watch.t != Type::Velocity {
-                        if current_watch.addr < 0x8FFFFF00 {
-                            current_watch.addr += 0x100;
+                    }
+                    12 => {
+                        if current_watch.t != Type::Velocity {
+                            if current_watch.addr < 0x8FFFFF00 {
+                                current_watch.addr += 0x100;
+                            }
                         }
-                    },
-                    13 => if current_watch.t != Type::Velocity {
-                        if current_watch.addr < 0x8FFFFFF0 {
-                            current_watch.addr += 0x10;
+                    }
+                    13 => {
+                        if current_watch.t != Type::Velocity {
+                            if current_watch.addr < 0x8FFFFFF0 {
+                                current_watch.addr += 0x10;
+                            }
                         }
-                    },
-                    14 => if current_watch.t != Type::Velocity {
-                        if current_watch.addr < 0x8FFFFFFF {
-                            current_watch.addr += 0x1;
+                    }
+                    14 => {
+                        if current_watch.t != Type::Velocity {
+                            if current_watch.addr < 0x8FFFFFFF {
+                                current_watch.addr += 0x1;
+                            }
                         }
-                    },
+                    }
                     16 => {
                         if current_watch.x < 255 {
                             current_watch.x += 1;

@@ -1,27 +1,53 @@
-# The Wind Waker Debug Menu
+# Wind Waker Debug Menu / Practice Tool
 
-The Wind Waker Debug Menu Rom Hack adds a Debug Menu with all kinds of useful Menus for editing the game's flags and inventory, activating cheats and warping to any stage in the game.
+## Compiling
+Clone this repo and do a `git submodule update --init` to pull down the correct
+TWW Bindings.
 
-## How To Compile
+Copy your copy of Wind Waker (Currently only NTSC-J) to the root folder
+for this project, and rename it to `gz2e01.iso`.
 
-To compile the source code you need to get the Rust Nightly compiler toolchain.
-You can acquire it either through the [official website](https://www.rust-lang.org/downloads.html).
+You can choose not copy or rename it if you would prefer, just make sure that the lines in
+Romhack.toml match the iso path.
+```Toml
+...
+[src]
+iso = "<iso-path/file-name>"
+...
+```
 
-Keep in mind that we currently need a few unstable features, so you need to install the nightly toolchain.
+### Setup the compiler
 
-Since we'll compile PowerPC code, you'll need to get a compiled ```libcore``` for PowerPC.
-You can do so by installing the PowerPC target through rustup:
+You will need rust to compile the libraries and iso, you can download it from
+[https://rustup.rs](https://rustup.rs).
 
+Set the compiler to work on the nightly build with
+```
+rustup override set nightly
+```
+
+Add the `powerpc-unknown-linux-gnu` toolchain with
 ```
 rustup target add powerpc-unknown-linux-gnu
 ```
 
-Now that we have the whole toolchain, you will need to specify the path of your version of Wind Waker (GZLJ01) in the `RomHack.toml`. Alternatively you can copy the game into the main folder as `gzlj01.iso`.
-
-To compile the Debug Menu, execute the following command:
-
+And then do a install the Romhack Compiler with
 ```
-cargo run -p compiler --release
+cargo install romhack --git https://github.com/CryZe/romhack-compiler
 ```
 
-The compiled ISO is now available in the `target` folder. You can change this location in the `RomHack.toml`.
+Run the romhack compiler to build a new iso
+```
+romhack build
+```
+
+The new iso will, by default, be put in the `target` folder. You can change this
+in the Romhack.toml file if you'd like by editing the lines
+```Toml
+...
+[build]
+map = "target/framework.map"
+iso = "<path-to/new-iso>"
+...
+```
+
