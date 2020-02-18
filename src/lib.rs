@@ -1,7 +1,6 @@
 #![no_std]
 #![allow(non_upper_case_globals)]
 
-#[macro_use]
 extern crate libtww;
 #[macro_use]
 extern crate lazy_static;
@@ -34,7 +33,7 @@ struct State {
 
 static mut STATE: Option<State> = None;
 
-static FONT: Font = include_font! { path: "res/Calamity-Bold.ttf", size: 18.0 };
+static FONT: Font = gcn_fonts::include_font! { path: "res/Calamity-Bold.ttf", size: 18.0 };
 
 unsafe fn get_state() -> &'static mut State {
     STATE.get_or_insert_with(|| State {
@@ -45,7 +44,7 @@ unsafe fn get_state() -> &'static mut State {
 
 #[no_mangle]
 pub extern "C" fn init() {
-    // Call overriden instruction
+    // Call overridden instruction
     system::cdyl_init_async();
 
     let console = Console::get();
@@ -74,9 +73,9 @@ pub extern "C" fn game_loop() {
             visible = true;
         }
     } else {
-        // memory::render_watches();
+        memory::render_watches();
         // Only check popups if the Debug Menu is not open
-        // popups::check_global_flags();
+        popups::check_global_flags();
     }
 }
 

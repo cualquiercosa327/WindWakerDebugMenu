@@ -1,8 +1,8 @@
 use core::fmt::Write;
 use libtww::game::Console;
 
-use controller;
-use utils::{move_cursor, transition, MenuState};
+use crate::controller;
+use crate::utils::{move_cursor, transition, MenuState};
 
 use super::{inv_menu_state, InventoryMenu};
 

@@ -985,13 +985,13 @@ pub fn render() {
                 let _ = write!(line.append(), "{}", unsafe { y_offset });
             }
             MENU_ITEM_X => {
-                let _ = write!(line.append(), "{:7.02}", coord.x);
+                let _ = write!(line.append(), "{:10.02}", coord.x);
             }
             MENU_ITEM_Y => {
-                let _ = write!(line.append(), "{:7.02}", coord.y);
+                let _ = write!(line.append(), "{:10.02}", coord.y);
             }
             MENU_ITEM_Z => {
-                let _ = write!(line.append(), "{:7.02}", coord.z);
+                let _ = write!(line.append(), "{:10.02}", coord.z);
             }
             MENU_ITEM_ROTATION => {
                 let _ = write!(line.append(), "{:7}", Link::horizontal_movement_direction());

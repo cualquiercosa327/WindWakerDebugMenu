@@ -6,11 +6,10 @@ use libtww::game::Console;
 use libtww::system::memory;
 use libtww::Addr;
 
-use controller;
-use core::cell::RefCell;
-use libtww::system::mutex::Mutex;
-use print;
-use utils::*;
+use crate::controller;
+use crate::print;
+use crate::utils::*;
+use spin::Mutex;
 
 #[derive(Copy, Clone, PartialEq)]
 #[allow(non_camel_case_types)]
@@ -185,14 +184,14 @@ lazy_static! {
             hex: false,
             visible: false,
         });
-        Mutex(RefCell::new(vec))
+        spin::Mutex::new(vec)
     };
 }
 
 pub fn transition_into() {}
 
 pub fn render_watches() {
-    ITEMS.borrow_mut().iter_mut().for_each(|item| {
+    ITEMS.lock().iter_mut().for_each(|item| {
         if item.visible {
             item.update();
             let mut s = ArrayString::<[u8; 64]>::new();
@@ -221,7 +220,7 @@ pub fn render() {
                 edit_cursor = 3;
             }
 
-            let mut current_watch: Watch = ITEMS.borrow_mut().remove(cursor);
+            let mut current_watch: Watch = ITEMS.lock().remove(cursor);
             current_watch.update();
 
             if controller::DPAD_LEFT.is_pressed() && edit_cursor > 3 {
@@ -395,12 +394,12 @@ pub fn render() {
                     _ => {}
                 }
             }
-            ITEMS.borrow_mut().insert(cursor, current_watch);
+            ITEMS.lock().insert(cursor, current_watch);
 
             for (index, (line, content)) in lines
                 .into_iter()
                 .skip(4)
-                .zip(ITEMS.borrow().iter())
+                .zip(ITEMS.lock().iter())
                 .enumerate()
             {
                 if index == cursor {
@@ -424,16 +423,16 @@ pub fn render() {
                 return;
             }
             if pressed_a {
-                if ITEMS.borrow().len() > 0 {
+                if ITEMS.lock().len() > 0 {
                     in_submenu = true;
                 }
             }
 
             if controller::X.is_pressed() {
-                ITEMS.borrow_mut().push(Watch::default());
+                ITEMS.lock().push(Watch::default());
             }
             if controller::Y.is_pressed() {
-                let mut items = ITEMS.borrow_mut();
+                let mut items = ITEMS.lock();
                 if items.len() > 0 {
                     if cursor < items.len() {
                         items.remove(cursor);
@@ -441,20 +440,20 @@ pub fn render() {
                 }
             }
 
-            if cursor >= ITEMS.borrow().len() {
-                cursor = ITEMS.borrow().len() - 1;
+            if cursor >= ITEMS.lock().len() {
+                cursor = ITEMS.lock().len() - 1;
             }
 
             if controller::DPAD_UP.is_pressed() && cursor > 0 {
                 cursor -= 1;
-            } else if controller::DPAD_DOWN.is_pressed() && cursor + 1 < ITEMS.borrow().len() {
+            } else if controller::DPAD_DOWN.is_pressed() && cursor + 1 < ITEMS.lock().len() {
                 cursor += 1;
             }
 
             for (index, (line, content)) in lines
                 .into_iter()
                 .skip(4)
-                .zip(ITEMS.borrow().iter())
+                .zip(ITEMS.lock().iter())
                 .enumerate()
             {
                 if index == cursor {

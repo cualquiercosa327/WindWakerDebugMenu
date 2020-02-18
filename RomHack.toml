@@ -10,8 +10,8 @@ patch = "src/patch.asm"
 map = "maps/framework.map"
 
 [build]
-map = "G:/Users/crish/Documents/Dolphin Emulator/Maps/GZLJ01.map"
-iso = "target/wwgz.iso"
+map = "target/framework.map"
+iso = "target/rom_hack.iso"
 
 [link]
 entries = ["init", "game_loop", "read_controller", "draw"]
