@@ -5,7 +5,7 @@ Clone this repo and do a `git submodule update --init` to pull down the correct
 TWW Bindings.
 
 Copy your copy of Wind Waker (Currently only NTSC-J) to the root folder
-for this project, and rename it to `gz2e01.iso`.
+for this project, and rename it to `gzlj01.iso`.
 
 You can choose not copy or rename it if you would prefer, just make sure that the lines in
 Romhack.toml match the iso path.
@@ -50,4 +50,3 @@ map = "target/framework.map"
 iso = "<path-to/new-iso>"
 ...
 ```
-

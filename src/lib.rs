@@ -20,7 +20,6 @@ pub mod popups;
 pub mod print;
 pub mod settings;
 pub mod spawn_menu;
-pub mod statics;
 pub mod utils;
 pub mod warp_menu;
 
