@@ -1,10 +1,6 @@
 #![no_std]
 #![allow(non_upper_case_globals)]
 
-extern crate libtww;
-#[macro_use]
-extern crate lazy_static;
-
 use libtww::game::Console;
 use libtww::system;
 
@@ -32,11 +28,9 @@ struct State {
 
 static mut STATE: Option<State> = None;
 
-static FONT: Font = gcn_fonts::include_font! { path: "res/Calamity-Bold.ttf", size: 18.0 };
-
 unsafe fn get_state() -> &'static mut State {
     STATE.get_or_insert_with(|| State {
-        font: FONT.upload(),
+        font: gcn_fonts::include_font! { path: "res/Calamity-Bold.ttf", size: 18.0 }.upload(),
         settings: settings::Settings { drop_shadow: true },
     })
 }
@@ -72,7 +66,6 @@ pub extern "C" fn game_loop() {
             visible = true;
         }
     } else {
-        memory::render_watches();
         // Only check popups if the Debug Menu is not open
         popups::check_global_flags();
     }

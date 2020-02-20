@@ -173,7 +173,7 @@ static mut edit_cursor: usize = 3;
 static mut in_submenu: bool = false;
 const LINE_LEN: usize = 31;
 
-lazy_static! {
+lazy_static::lazy_static! {
     pub static ref ITEMS: Mutex<ArrayVec<[Watch; 128]>> = {
         let mut vec = ArrayVec::new();
         vec.push(Watch {
